@@ -10,3 +10,4 @@ __pycache__/
 
 # Environnement virtuel
 bot-env/
+data/
