@@ -27,21 +27,4 @@ def load_image(i):
 
     return img
 
-"""
-if img is not None:
-    print("Image loaded successfully.")
-    #img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    #img_copy = cv2.GaussianBlur(img_gray, (5, 5), 3, 4)
-    #img_copy = cv2.Sobel(src=img_copy, ddepth=cv2.CV_64F, dx=1, dy=1, ksize=5)
-    #img_copy=cv2.Canny(img,0,100)
-    #circles = cv2.HoughCircles(img_copy, cv2.HOUGH_GRADIENT, dp=1, minDist=500,param1=100, param2=30, minRadius=10, maxRadius=100)
 
-    plt.imshow(img,cmap='gray')
-    plt.show()
-else:
-    print("No image loaded. Exiting.")
-
-for i in range(1, 286):
-    print("charge",i)
-    img = load_image(i)
-    """
