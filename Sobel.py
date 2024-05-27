@@ -4,6 +4,7 @@ import matplotlib.image as mplimg
 import cv2
 import matplotlib.pyplot as plt
 import math
+
 def convolutions(img, kernel):
     h, w = img.shape
     
@@ -86,9 +87,9 @@ def chainDeTraitement(img):
     imgSobel = Sobel(img_gaussian)
     imgSeuil = seuilGray(imgSobel, 30)
     img_max = cv2.resize(imgSeuil, (w, h))
-    
     maxTaieux = h if h>w else w
-    
+    detected_circles = []
+
     if img_max.dtype != np.uint8:  # Vérifier le type de données de l'image
         print("converti")
         img_max = img_max.astype(np.uint8)  # Convertir en CV_8UC1 si nécessaire
@@ -104,12 +105,17 @@ def chainDeTraitement(img):
             cv2.circle(img_copy, (i[0], i[1]), i[2], (0, 255, 0), 2)
             # draw the center of the circle
             cv2.circle(img_copy, (i[0], i[1]), 2, (0, 0, 255), 3)
-    plt.imshow(imgSobel)
-    plt.show() 
-    plt.imshow(img_max)
-    plt.show() 
-    plt.imshow(img_copy)
-    plt.show()   
+            centre = (i[0], i[1])
+            rayon = i[2]
+            detected_circles.append((centre, rayon))
+
+    return detected_circles 
+    # plt.imshow(imgSobel)
+    # plt.show() 
+    # plt.imshow(img_max)
+    # plt.show() 
+    # plt.imshow(img_copy)
+    # plt.show()   
 
 for i in range(0, 286):
     print("charge",i)
