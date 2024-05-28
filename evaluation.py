@@ -3,7 +3,7 @@ import cv2
 import numpy as np
 import Sobel
 import detection
-
+import math
 def read_annotations(json_file):
     with open(json_file, 'r') as file:
         data = json.load(file)
@@ -65,6 +65,18 @@ def calculate_iou(circle1, circle2):
 
     return intersection_area / union_area
 
+def calculate_pixel(circle):
+    centre, r = circle
+    h, k = centre
+    ensembre = set()
+    for x in range(h - r, h + r + 1):
+        for y in range(k - r, k + r + 1):
+            if (x - h) ** 2 + (y - k) ** 2 <= r ** 2:
+                ensembre.add((x,y))
+    return ensembre
+
+
+
 
 def evaluer_image (img, json_file):
     annotated_circles = read_annotations(json_file)
@@ -85,19 +97,42 @@ def evaluer_image (img, json_file):
     moyenne = np.mean(iou_scores) if iou_scores else 0
     return moyenne
 
+def evaluer_image_pixel (img, json_file):
+    annotated_circles = read_annotations(json_file)
+    detected_circles = Sobel.chainDeTraitement(img)
+    
+    annotated_set = set()
+    detected_set = set()
+    for detected_circle in detected_circles:
+        detected_set |= calculate_pixel(detected_circle)
+    for annotated_circle in annotated_circles:
+        annotated_set |= calculate_pixel(annotated_circle)
+    intersection_area = annotated_set & detected_set
+    union_area = annotated_set | detected_set
+    return float(len(intersection_area))/float(len(union_area)), len(annotated_circles), len(detected_circles)
 
 def execution(nb_images):
     #on va stocker le num de l'image et son score
     scores=[]
-    for i in range(0, nb_images):
+    maes = []
+    mses = []
+    for i in range(86, nb_images):
         print("charge",i)
         img = detection.load_image(i)
-        json_file=f"..\\..\\Images/{i}.json"
+        json_file=f"data\\validation\\json\\{i}.json"
 
         if  img is not None and img.size != 0:
-            score=evaluer_image(img,json_file)
-            scores.append(i,score)
-
-execution(5)
+            score, nbAnnotated, nbDetected=evaluer_image_pixel(img,json_file)
+            mae = abs(nbAnnotated-nbDetected)
+            maes.append(mae)
+            mse = math.pow(nbAnnotated-nbDetected, 2)
+            mses.append(mse) 
+            scores.append(score)
+            with open("resulte.txt", 'a') as file:
+                file.write(str(score)+", "+ str(mae) +", " + str(mse) +"\n")
+            print(score)
+    with open("resulte.txt", 'a') as file:
+        file.write("mean", str(np.mean(scores))+", " + str(np.mean(maes))+ ", " + str(np.mean(mses)))
+execution(286)
         
 

@@ -78,37 +78,34 @@ def chainDeTraitement(img):
     kernel_gaussian = gaussian_kernel(15, 1.5)
     h, w, _ = img.shape
     h_min, w_min = h, w
-    while h_min> 1000 or w_min>1000:
+    while h_min> 700 or w_min>700:
         h_min //= 2
         w_min //= 2
     img_min = cv2.resize(img, (w_min, h_min))
     img_gray1 = cv2.cvtColor(img_min, cv2.COLOR_BGR2GRAY)
     img_gaussian = convolutions(img_gray1, kernel_gaussian)
     imgSobel = Sobel(img_gaussian)
-    imgSeuil = seuilGray(imgSobel, 30)
-    img_max = cv2.resize(imgSeuil, (w, h))
+    #imgSeuil = seuilGray(imgSobel, 30)
+    img_max = cv2.resize(imgSobel, (w, h))
     maxTaieux = h if h>w else w
     detected_circles = []
 
     if img_max.dtype != np.uint8:  # Vérifier le type de données de l'image
-        print("converti")
         img_max = img_max.astype(np.uint8)  # Convertir en CV_8UC1 si nécessaire
 
     img_copy = img.copy()
 
-    circles=cv2.HoughCircles(img_max,cv2.HOUGH_GRADIENT,1, minDist = maxTaieux//10, param1=200,param2=60,minRadius=maxTaieux//15,maxRadius=maxTaieux//8)
+    circles=cv2.HoughCircles(img_max,cv2.HOUGH_GRADIENT,1, minDist = maxTaieux//13, param1=60,param2=50,minRadius=maxTaieux//20,maxRadius=maxTaieux//8)
     if circles is not None:
         circles = np.uint16(np.around(circles))
         for i in circles[0, :]:
-            print("circullll")
             # draw the outer circle
             cv2.circle(img_copy, (i[0], i[1]), i[2], (0, 255, 0), 2)
             # draw the center of the circle
             cv2.circle(img_copy, (i[0], i[1]), 2, (0, 0, 255), 3)
             centre = (i[0], i[1])
             rayon = i[2]
-            detected_circles.append((centre, rayon))
-
+            detected_circles.append((centre, rayon)) 
     return detected_circles 
     # plt.imshow(imgSobel)
     # plt.show() 
@@ -116,10 +113,9 @@ def chainDeTraitement(img):
     # plt.show() 
     # plt.imshow(img_copy)
     # plt.show()   
-
-for i in range(0, 286):
+"""
     print("charge",i)
     img = detection.load_image(i)
     if  img is not None and img.size != 0:
         chainDeTraitement(img)
-                             
+"""                             
