@@ -132,7 +132,7 @@ def execution(nb_images):
                 file.write(str(score)+", "+ str(mae) +", " + str(mse) +"\n")
             print(score)
     with open("resulte.txt", 'a') as file:
-        file.write("mean", str(np.mean(scores))+", " + str(np.mean(maes))+ ", " + str(np.mean(mses)))
+        file.write("mean"+ str(np.mean(scores))+", " + str(np.mean(maes))+ ", " + str(np.mean(mses)))
 execution(286)
         
 
