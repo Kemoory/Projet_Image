@@ -116,7 +116,7 @@ def execution(nb_images):
     scores=[]
     maes = []
     mses = []
-    for i in range(0, nb_images):
+    for i in range(229, nb_images):
         print("charge",i)
         img = detection.load_image(i)
         json_file=f"data/test/json/{i}.json"
@@ -133,6 +133,6 @@ def execution(nb_images):
             print(score)
     with open("result.txt", 'a') as file:
         file.write("mean"+ str(np.mean(scores))+", " + str(np.mean(maes))+ ", " + str(np.mean(mses)))
-execution(86)
+execution(286)
         
 
