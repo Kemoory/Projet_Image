@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import os
 
 def load_image(i):
-    lien_image = f"data/validation/{i}"  # Fixing the string formatting
+    lien_image = f"data/test/{i}"  # Fixing the string formatting
     img = None
     if os.path.exists(lien_image + ".jpg"):
         img = mplimg.imread(lien_image + ".jpg")

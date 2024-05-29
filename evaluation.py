@@ -119,7 +119,7 @@ def execution(nb_images):
     for i in range(0, nb_images):
         print("charge",i)
         img = detection.load_image(i)
-        json_file=f"data/validation/json/{i}.json"
+        json_file=f"data/test/json/{i}.json"
 
         if  img is not None and img.size != 0:
             score, nbAnnotated, nbDetected=evaluer_image_pixel(img,json_file)
