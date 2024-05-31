@@ -1,5 +1,6 @@
 import json
 import cv2
+import matplotlib.pyplot as plt
 import numpy as np
 import Sobel
 import detection
@@ -133,6 +134,31 @@ def execution(nb_images):
             print(score)
     with open("result.txt", 'a') as file:
         file.write("mean"+ str(np.mean(scores))+", " + str(np.mean(maes))+ ", " + str(np.mean(mses)))
+
+
+
+def draw_detected_circles():
+
+    image=detection.load_image(0)
+    detected_circles=Sobel.chainDeTraitement(image)
+    # Afficher l'image
+    plt.imshow(image)
+    
+    # Dessiner les cercles détectés
+    for center, radius in detected_circles:
+        circle = plt.Circle(center, radius, color='r', fill=False)
+        plt.gca().add_patch(circle)
+    
+    # Fixer les limites des axes pour s'assurer que les cercles sont entièrement visibles
+    plt.xlim(0, image.shape[1])
+    plt.ylim(image.shape[0], 0)
+    
+    # Afficher l'image avec les cercles dessinés
+    plt.show()
+
+draw_detected_circles()
+
+
 execution(173)
         
 
